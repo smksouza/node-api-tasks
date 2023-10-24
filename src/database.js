@@ -22,7 +22,16 @@ export class Database {
         const rowIndex = this.#database[table].findIndex(row => row.id === id);
         return rowIndex !== -1;
     }
-    
+
+    completed(table, id) {
+        const rowIndex = this.#database[table].findIndex(row => row.id == id)
+
+        if (rowIndex > -1) {
+            this.#database[table][rowIndex].completed_at = 'completed'
+            this.#persist();
+        }
+    }
+
 
     select(table) {
         const data = this.#database[table] ?? []
@@ -50,14 +59,14 @@ export class Database {
 
             const updatedItem = {
                 id: row.id,
-                title: data.title || row.title, 
+                title: data.title || row.title,
                 description: data.description || row.description,
                 updated_at: data.updated_at,
                 completed_at: row.completed_at,
                 created_at: row.created_at
             }
             this.#database[table][rowIndex] = updatedItem;
-            
+
             this.#persist();
         }
     }
